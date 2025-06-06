@@ -1,0 +1,97 @@
+$ diff w3iogomd.ftn w3iogomd.ftn.orig
+545,547c545
+<              FLG2D(10,2)=.TRUE.
+<            CASE('U3')
+<              FLG2D(10,3)=.TRUE.
+---
+>              FLG2D(10,1)=.TRUE.
+726c724
+<       USE W3ADATMD, ONLY: CG, WN, DW, CX, CY
+---
+>       USE W3ADATMD, ONLY: CG, WN, DW
+761c759
+<                                  M1, VGXWP, VGYWP, VGMWP, EBANDWP
+---
+>                                  M1
+772,776c770,772
+<                                  ETTPMM(NSEAL), ETF(NSEAL),           &
+<                                  ET1(NSEAL), ABWP(NSEAL),             &
+<                                  ETWP(NSEAL)
+<       REAL                       USSCO, FT1, WPC1, WPC2
+<       REAL, SAVE              :: HSMIN = 0.01, DWATK = 1.025
+---
+>                                  ETTPMM(NSEAL), ETF(NSEAL), ET1(NSEAL)
+>       REAL                       USSCO, FT1
+>       REAL, SAVE              :: HSMIN = 0.01
+792,794d787
+< ! Wave power addition: Constants
+<       WPC1   = DWATK * GRAV
+<       WPC2   = WPC1 * GRAV / ( 4. * PI )
+825c818
+<       ETUSCX = 0.
+---
+>       ETUSCY = 0.
+834,835d826
+< ! Wave power addition:
+<       ETWP   = 0.
+866,867d856
+< ! Wave power addition:        
+<         ABWP   = 0.
+892,897d880
+< ! Wave power addition: Doppler-shifted group velocity
+<             VGXWP = CX(ISEA) + ECOS(ITH) * CG(IK,ISEA)
+<             VGYWP = CY(ISEA) + ESIN(ITH) * CG(IK,ISEA)
+<             VGMWP = SQRT( VGXWP**2 + VGYWP**2 )
+< ! Wave power addition: Doppler-shifted modification
+<             ABWP(JSEA) = ABWP(JSEA) + A(ITH,IK,JSEA) * VGMWP
+912,913d894
+< ! Wave power addition: Doppler-shifted calculation
+<           ETWP(JSEA)   = ETWP(JSEA) + ABWP(JSEA) * FACTOR
+1031,1036c1012
+< !        ETF(JSEA) = ETF(JSEA) + GRAV * FTTR * EBAND  ! this is the integral of CgE in deep water
+< ! Wave power correction: Intermediate-water tail using c_{g,D}
+<         ETF(JSEA) = ETF(JSEA) + GRAV / 2. * FTTR * EBAND
+< ! Wave power addition: Doppler-shifted tail using c_{g,D} and c_{g,I}
+<         EBANDWP   = ABWP(JSEA) / CG(NK,ISEA)**2
+<         ETWP(JSEA)= ETWP(JSEA) + GRAV / 2. * FTTR * EBANDWP
+---
+>         ETF(JSEA) = ETF(JSEA) + GRAV * FTTR * EBAND  ! this is the integral of CgE in deep water
+1111,1116c1087
+< ! Wave power: Deep-water form using negative moment
+<           USERO(JSEA,1) = WPC2 * TPI * ETR(JSEA)
+< ! Wave power: Intermediate-water form using corrected flux with c_{g,I}
+<           USERO(JSEA,2) = WPC1 * ETF(JSEA)
+< ! Wave power: Doppler-shifted form 
+<           USERO(JSEA,3) = WPC1 * ETWP(JSEA)
+---
+> !  Add here USERO(JSEA,1) ... 
+1817,1820d1787
+< !                IF ( FLOGRD( 10, 1) ) U1 (ISEA) = UNDEF
+< !                IF ( FLOGRD( 10, 2) ) U2 (ISEA) = UNDEF
+< !                IF ( FLOGRD( 10, 3) ) U3 (ISEA) = UNDEF
+< !
+2090,2095c2057,2059
+<                   ELSE IF ( IFI .EQ. 10 .AND. IFJ .EQ. 1 ) THEN
+<                     WRITE ( NDSOG ) USERO(1:NSEA,1)
+<                   ELSE IF ( IFI .EQ. 10 .AND. IFJ .EQ. 2 ) THEN
+<                     WRITE ( NDSOG ) USERO(1:NSEA,2)
+<                   ELSE IF ( IFI .EQ. 10 .AND. IFJ .EQ. 3 ) THEN
+<                     WRITE ( NDSOG ) USERO(1:NSEA,3)
+---
+>                   ELSE IF ( IFI .EQ. 10 ) THEN
+>                     WRITE ( NDSOG ) USERO(1:NSEA,IFJ)
+> !
+2331,2337c2295
+<                   ELSE IF ( IFI .EQ. 10 .AND. IFJ .EQ. 1 ) THEN
+<                     READ (NDSOG,END=801,ERR=802,IOSTAT=IERR)         &
+<                                                       USERO(1:NSEA,1)
+<                   ELSE IF ( IFI .EQ. 10 .AND. IFJ .EQ. 2 ) THEN
+<                     READ (NDSOG,END=801,ERR=802,IOSTAT=IERR)         &
+<                                                       USERO(1:NSEA,2)
+<                   ELSE IF ( IFI .EQ. 10 .AND. IFJ .EQ. 3 ) THEN
+---
+>                   ELSE IF ( IFI .EQ. 10 ) THEN
+2339c2297
+<                                                       USERO(1:NSEA,3)
+---
+>                                                       USERO(1:NSEA,IFJ)
