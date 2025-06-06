@@ -1,3 +1,4 @@
+/* General body */
 body {
     text-align: center;
     background-image: url("img/background_wavy_paper.jpg");
@@ -18,9 +19,10 @@ a:visited {
 }
 
 /* Headings */
-h1, h2, h3, h4 {
+h1,h2,h3,h4 { 
     font-family: palatino, georgia, verdana, arial, sans-serif;
     font-weight: bold;
+    padding-bottom: 2ex;
 }
 h1 {
     font-size: 175%;
@@ -31,11 +33,10 @@ h2 {
     font-size: 125%;
     text-align: center;
     text-transform: uppercase;
-    margin: 20px 0 10px 0;
 }
 h3 {
     font-size: 125%;
-    margin: 30px 0 15px 0;
+    padding-top: 12px;
 }
 h4 {
     font-style: italic;
@@ -95,9 +96,9 @@ li.indent {
     clear: both;
 }
 
-/* Extra polished small-screen tweak */
+/* Optional: responsive font scaling for small screens */
 @media (max-width: 600px) {
     h1 { font-size: 150%; }
-    h3 { font-size: 110%; margin: 20px 0 10px 0; }
+    h3 { font-size: 110%; }
     #center { padding: 10px; }
 }
